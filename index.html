@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>반응속도</title>
+    <style>
+        #screen {
+            width: 300px;
+            height: 200px;
+            text-align: center;
+            user-select: none;
+        }
+
+        #screen.blueWaiting {
+            background-color: aqua;
+        }
+
+        #screen.redReady {
+            background-color: red;
+            color: white;
+        }
+
+        #screen.greenNow {
+            background-color: greenyellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="screen" class="blueWaiting">클릭해서 시작하세요</div>
+    <div id="result"></div>
+    <script>
+        const $screen = document.querySelector('#screen');
+        const $result = document.querySelector('#result');
+
+        let startTime;
+        let endTime;
+        $screen.addEventListener('click', (event) => {
+            if ($screen.className === "blueWaiting") { // 파랑화면에서 클릭했을 때
+                $screen.classList.replace("blueWaiting", "redReady")
+                $screen.textContent = '화면이 초록색이 되면 클릭하세요';
+                setTimeout(() => {
+                    $screen.classList.replace("redReady", "greenNow");
+                    $screen.textContent = '클릭하세요!';
+                    startTime = new Date();
+                }, Math.floor(Math.random() * 3000 ));
+
+            } else if ($screen.className === "redReady") { // 빨강화면에서 클릭했을 때
+                
+            } else if ($screen.className === "greenNow") { // 초록화면에서 클릭했을 때
+                endTime = new Date();
+                $result.textContent = `내 기록 : ${endTime - startTime}ms`
+            }
+        })
+    </script>
+</body>
