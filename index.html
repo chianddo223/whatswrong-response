@@ -34,23 +34,55 @@
         const $screen = document.querySelector('#screen');
         const $result = document.querySelector('#result');
 
+        const recordList = [];
         let startTime;
         let endTime;
+        let records = '';
+        let recordAverage = '';
+        let recordGross = 0;
+        let stepToGreen;
         $screen.addEventListener('click', (event) => {
             if ($screen.className === "blueWaiting") { // 파랑화면에서 클릭했을 때
                 $screen.classList.replace("blueWaiting", "redReady")
                 $screen.textContent = '화면이 초록색이 되면 클릭하세요';
-                setTimeout(() => {
+                // 랜덤으로 초록화면을 등장시키면서 시작시간을 저장
+                stepToGreen = setTimeout(() => {
                     $screen.classList.replace("redReady", "greenNow");
                     $screen.textContent = '클릭하세요!';
                     startTime = new Date();
-                }, Math.floor(Math.random() * 3000 ));
-
+                }, Math.floor(Math.random() * 3000));
             } else if ($screen.className === "redReady") { // 빨강화면에서 클릭했을 때
-                
+                clearTimeout(stepToGreen);
+                alert('반칙!! 초록화면이 뜨고 나서 클릭하세요ㅡㅡ');
+                $screen.textContent = '클릭해서 시작하세요';
+                $screen.classList.replace("redReady", "blueWaiting");
             } else if ($screen.className === "greenNow") { // 초록화면에서 클릭했을 때
-                endTime = new Date();
-                $result.textContent = `내 기록 : ${endTime - startTime}ms`
+                if (records == '') { // 기록이 비어있다면 기록하기.
+                    endTime = new Date();
+                    records = endTime - startTime;
+                    recordList.push(records);
+
+                    // 기록들을 더하고 평균내기
+                    for (let i = 0; i < recordList.length; i++) {
+                        recordGross += recordList[i]
+                    };
+                    recordAverage = recordGross / recordList.length;
+                    console.log(recordGross, recordList, recordList.sort());
+                    let recordListSort = recordList.sort();
+                    $result.innerHTML = `내 기록 : ${records}ms 
+                    <br><br> 내 평균 기록 : ${recordAverage} 
+                    <br><br> 내 기록 속도순 ${recordListSort}`;
+                    if(records === recordListSort[0]){
+                        $result.innerHTML += `<br><br> 신기록입니다 축하드려용!!`;
+                    }
+                    $screen.innerHTML += `<br> 다시 시작하려면 화면을 누르세요`;
+                    recordGross = 0;
+                } else { // 기록이 있다면 초기화
+                    records = '';
+                    $screen.classList.replace("greenNow", "blueWaiting");
+                    $screen.textContent = '클릭해서 시작하세요';
+                    $result.textContent = '';
+                }
             }
         })
     </script>
