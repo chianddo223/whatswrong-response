@@ -6,8 +6,9 @@
     <title>반응속도</title>
     <style>
         #screen {
-            width: 300px;
-            height: 200px;
+            align-items: center;
+            width: 50vw;
+            height: 50vw;
             text-align: center;
             user-select: none;
         }
@@ -68,11 +69,11 @@
                     };
                     recordAverage = recordGross / recordList.length;
                     console.log(recordGross, recordList, recordList.sort());
-                    let recordListSort = recordList.sort();
+                    let recordListSort = recordList.sort((p, c) => p - c).slice(0,5);
                     $result.innerHTML = `내 기록 : ${records}ms 
                     <br><br> 내 평균 기록 : ${recordAverage} 
-                    <br><br> 내 기록 속도순 ${recordListSort}`;
-                    if(records === recordListSort[0]){
+                    <br><br> 내 기록 TOP 5 : ${recordListSort}`;
+                    if (records === recordListSort[0]) {
                         $result.innerHTML += `<br><br> 신기록입니다 축하드려용!!`;
                     }
                     $screen.innerHTML += `<br> 다시 시작하려면 화면을 누르세요`;
